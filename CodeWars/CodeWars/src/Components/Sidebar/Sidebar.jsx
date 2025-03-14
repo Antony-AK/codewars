@@ -31,18 +31,28 @@ const Sidebar = ({ setSelectedQuestion, questions }) => {
                 </div>
             </div>
 
-            {/* Dynamically Render Question Numbers */}
+            {/* Dynamically Render Question Numbers with Status-Based Colors */}
             <div className="question-list">
                 {questions.length > 0 ? (
-                    questions.map((question, index) => (
-                        <span
-                            key={question._id || `question-${index}`} // Ensure unique keys
-                            className='question' 
-                            onClick={() => handleSelectQuestion(question)}
-                        >
-                            {index + 1}
-                        </span>
-                    ))
+                    questions.map((question, index) => {
+                        // Determine the CSS class based on question status
+                        let statusClass = "unattempted"; // Default
+                        if (question.status === "Completed") {
+                            statusClass = "completed";
+                        } else if (question.status === "Review") {
+                            statusClass = "review";
+                        }
+
+                        return (
+                            <span
+                                key={question._id || `question-${index}`} // Ensure unique keys
+                                className={`question ${statusClass}`} 
+                                onClick={() => handleSelectQuestion(question)}
+                            >
+                                {index + 1}
+                            </span>
+                        );
+                    })
                 ) : (
                     <p>No questions available</p> // Show message when empty
                 )}
